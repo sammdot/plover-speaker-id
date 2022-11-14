@@ -20,7 +20,6 @@ DEFAULT_SPEAKERS = {
 
 class SpeakerTable:
   def __init__(self):
-    # TODO: load speaker IDs from external file in Plover's config directory
     if not spkr_dict_path.exists():
         with open(spkr_dict_path, "w") as f:
             json.dump(DEFAULT_SPEAKERS, f)
