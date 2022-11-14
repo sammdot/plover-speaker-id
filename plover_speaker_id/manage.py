@@ -26,7 +26,7 @@ def speaker_id_end(ctx, _):
   id = begin_action.speaker_id
   name = get_translation(ctx)
   spkr_table[id] = name
-
+  spkr_table.save()
   a = ctx.new_action()
   a.prev_attach = True
   a.prev_replace = f"{begin_action.text} {name}"

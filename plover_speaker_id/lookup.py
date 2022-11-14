@@ -1,3 +1,8 @@
+from plover.oslayer.config import CONFIG_DIR
+import json
+import pathlib
+spkr_dict_path = pathlib.Path(CONFIG_DIR) / "spkr.json"
+
 DEFAULT_SPEAKERS = {
   1: "Mr. Stphao",
   2: "Ms. Skwrao",
@@ -12,10 +17,15 @@ DEFAULT_SPEAKERS = {
 }
 
 
+
 class SpeakerTable:
   def __init__(self):
-    # TODO: load speaker IDs from external file in Plover's config directory
     self._speakers = DEFAULT_SPEAKERS
+    if not spkr_dict_path.exists():
+        self.save()
+    else:
+        with open(spkr_dict_path, "r") as f:
+            self._speakers = json.loads(f.read(), object_hook=lambda d: {int(k) if k.lstrip('-').isdigit() else k: v for k, v in d.items()})
 
   def __getitem__(self, id: int) -> str:
     return self._speakers.get(id, f"[Speaker {id}]")
@@ -23,6 +33,9 @@ class SpeakerTable:
   def __setitem__(self, id: int, name: str):
     self._speakers[id] = name
 
+  def save(self):
+    with open(spkr_dict_path, "w") as f:
+      json.dump(self._speakers, f)    
 
 spkr_table = SpeakerTable()
 
