@@ -20,10 +20,9 @@ DEFAULT_SPEAKERS = {
 
 class SpeakerTable:
   def __init__(self):
+    self._speakers = DEFAULT_SPEAKERS
     if not spkr_dict_path.exists():
-        with open(spkr_dict_path, "w") as f:
-            json.dump(DEFAULT_SPEAKERS, f)
-        self._speakers = DEFAULT_SPEAKERS
+        self.save()
     else:
         with open(spkr_dict_path, "r") as f:
             self._speakers = json.loads(f.read(), object_hook=lambda d: {int(k) if k.lstrip('-').isdigit() else k: v for k, v in d.items()})
